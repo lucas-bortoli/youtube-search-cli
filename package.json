@@ -1,0 +1,7 @@
+{
+  "name": "youtube-search",
+  "dependencies": {
+    "argparse": "^2.0.1",
+    "youtube-search": "^1.1.4"
+  }
+}

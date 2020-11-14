@@ -1,0 +1,27 @@
+#!/bin/env node
+
+const search = require('youtube-search');
+const { ArgumentParser } = require('argparse');
+
+const parser = new ArgumentParser({
+	description: 'YouTube video search tool'
+});
+
+parser.add_argument('-q', '--query', { help: 'The search string', required: true }) 
+parser.add_argument('-n', '--number', { help: 'Number of results to return', default: 1 }) 
+parser.add_argument('-k', '--key', { help: 'YouTube Data API key (not required if $YTSEARCH_KEY is set)' }) 
+
+const args = parser.parse_args()
+
+search(args.query, {
+	maxResults: args.number,
+	key: args.key || process.env.YTSEARCH_KEY,
+}, (err, results) => {
+	if (err)
+		return console.error(err.response.status);
+
+	// show only videos
+	results = results.filter(r => r.kind === 'youtube#video')
+
+	console.log(results.map(r => r.id).join('\n'));
+})
